@@ -7,14 +7,14 @@ content-type: application/json
 }
 
 ###
-POST http://localhost:3000/partner
+POST http://localhost:3000/partners
 content-type: application/json
 
 {
     "name": "Partner 1",
-    "email": "partner1@user.com",
+    "email": "partner07@user.com",
     "password": "secret",
-    "company_name": "Company Name 1",
+    "company_name": "Company Name 1"
 }
 
 ###
@@ -37,7 +37,7 @@ content-type: application/json
     "name": "Event 1",
     "description": "Description 1",
     "date": "2025-01-01T00:00:00.000Z",
-    "location": "Rua x, bairro y, cidade z",
+    "location": "Rua x, bairro y, cidade z"
 }
 ### Listagens de evento do parceiro
 GET http://localhost:3000/partners/events

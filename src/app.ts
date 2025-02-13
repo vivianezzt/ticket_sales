@@ -1,4 +1,17 @@
 import express from 'express';
+import * as mysql from 'mysql2/promise';
+import bcrypt from 'bcrypt';
+
+function createConnection() {
+  return mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'tickets',
+    port: 3306,
+  });
+}
+
 
 const app = express();  
 app.use(express.json());
@@ -14,9 +27,26 @@ app.post('/auth/login', (req, res) => {
 });
 
 // informações do parceiro
-app.post('/partner', (req, res) => {
+app.post('/partners', async(req, res) => {
     const { name, email, password, company_name } = req.body;
+    const connection = await createConnection();
+    try{
+    const createdAt = new Date();
+    const hashPassword = await bcrypt.hash(password, 10);
+    const [userResult] = await connection.execute<mysql.ResultSetHeader>('INSERT INTO users (name, email, password, created_at) VALUES (?, ?, ?, ?)', 
+        [name, email, hashPassword, createdAt]);
+    
+
+    const userId = userResult.insertId;
+    const [partnersResult] = await connection.execute<mysql.ResultSetHeader>('INSERT INTO partners (user_id, company_name, created_at) VALUES (?, ?, ?)', 
+        [userId, company_name, createdAt]
+    );
+    res.status(201).json({ id: partnersResult.insertId, name, email, company_name, createdAt });
+} finally{
+    await connection.end();
+}
 });
+
 // informações do cliente (customer )
 app.post('/customer', (req, res) => {
     const { name, email, password, address, phone } = req.body;
