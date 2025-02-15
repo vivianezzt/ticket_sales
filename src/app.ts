@@ -8,7 +8,7 @@ function createConnection() {
     user: 'root',
     password: 'root',
     database: 'tickets',
-    port: 3306,
+    port: 33060,
   });
 }
 
@@ -80,6 +80,13 @@ app.get('/events/:eventId', (req, res) => {
     console.log(eventId);
 });
 
-app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
+app.listen(3000, async () => {
+    const connection = await createConnection();
+    await connection.execute("SET FOREIGN_KEY_CHECKS = 0");
+    await connection.execute("TRUNCATE TABLE users");
+    await connection.execute("TRUNCATE TABLE partners");
+    await connection.execute("TRUNCATE TABLE events");
+    await connection.execute("TRUNCATE TABLE customers");
+    await connection.execute("SET FOREIGN_KEY_CHECKS = 1");
+    console.log('Server is running in http://localhost:3000');
 });
