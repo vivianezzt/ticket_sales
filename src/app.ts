@@ -27,7 +27,7 @@ app.post('/auth/login', (req, res) => {
 });
 
 // informações do parceiro
-app.post('/partners', async(req, res) => {
+app.post('/partners', async (req, res) => {
     const { name, email, password, company_name } = req.body;
     const connection = await createConnection();
     try{
@@ -48,9 +48,35 @@ app.post('/partners', async(req, res) => {
 });
 
 // informações do cliente (customer )
-app.post('/customer', (req, res) => {
+app.post('/customers', async (req, res) => {
     const { name, email, password, address, phone } = req.body;
+    const connection = await createConnection();
+    try {
+        const createdAt = new Date();
+        const hashPassword = await bcrypt.hash(password, 10);
+        const [userResult] = await connection.execute<mysql.ResultSetHeader>(
+            'INSERT INTO users (name, email, password, created_at) VALUES (?, ?, ?, ?)', 
+            [name, email, hashPassword, createdAt]
+        );
+
+        const userId = userResult.insertId;
+        const [customersResult] = await connection.execute<mysql.ResultSetHeader>(
+            'INSERT INTO customers (user_id, address, phone, created_at) VALUES (?, ?, ?, ?)', 
+            [userId, address, phone, createdAt]
+        );
+
+        res.status(201).json({ 
+            id: customersResult.insertId, 
+            user_id: userId, 
+            address, 
+            phone,  
+            created_at: createdAt 
+        });
+    } finally {
+        await connection.end();
+    }
 });
+
 
 // registrar novos eventos (events)
 app.post('/partners/events', (req, res) => {

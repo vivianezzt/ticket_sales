@@ -23,7 +23,7 @@ content-type: application/json
 
 {
     "name": "Customer 1",
-    "email": "partner1@user.com",
+    "email": "customers1@user.com",
     "password": "secret",
     "address": "Address 1",
     "phone": "123456789"
