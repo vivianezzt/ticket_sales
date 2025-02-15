@@ -2,28 +2,29 @@ POST http://localhost:3000/auth/login
 content-type: application/json
 
 {
-  "email": "partner1@user.com",
+    "email": "partner1@user.com",
     "password": "secret"
 }
 
+
 ###
-POST http://localhost:3000/partners
+POST http://localhost:3000/partners/register
 content-type: application/json
 
 {
     "name": "Partner 1",
-    "email": "partner70@user.com",
+    "email": "partner1@user.com",
     "password": "secret",
     "company_name": "Company Name 1"
 }
 
 ###
-POST http://localhost:3000/customers
+POST http://localhost:3000/customers/register
 content-type: application/json
 
 {
     "name": "Customer 1",
-    "email": "customers1@user.com",
+    "email": "customers2@user.com",
     "password": "secret",
     "address": "Address 1",
     "phone": "123456789"
@@ -32,6 +33,7 @@ content-type: application/json
 ### Criação do evento pelo parceiro
 POST http://localhost:3000/partners/events
 content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJwYXJ0bmVyMUB1c2VyLmNvbSIsImlhdCI6MTczOTY1MDg4MywiZXhwIjoxNzM5NjU0NDgzfQ._ZqmYjqOTJHA6ob_tRQV-sm4dHA6KVjC_fsZeuS-FKs
 
 {
     "name": "Event 1",
